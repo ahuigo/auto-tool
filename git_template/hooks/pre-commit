@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -e
+set -o pipefail;
+hasMakeTest () {
+    makefile=$(ls | grep -iE '^makefile$')
+    if [[ -n $makefile ]];then
+        if grep -E '^test:' $makefile >/dev/null; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+maketest () {
+    echo "run test...."
+    if hasMakeTest;then
+        make test
+    # golang
+    elif ls |grep -E '^go.mod$' >/dev/null; then
+       go test -coverpkg=./... ./... |tee coverage.out
+       if [[ -f main.go ]] ;then
+           go build main.go > /dev/null
+       elif [[ -f cmd/main.go ]] ;then
+           go build cmd/main.go > /dev/null
+    # npm
+    elif ls |grep -E '^package.json$' >/dev/null; then
+        npm test
+    # deno
+    elif ls |grep -E '^deno.jsonc?$' >/dev/null; then
+        deno test -A --no-check=remote
+    # python
+    elif ls |grep -E '^setup.py$' >/dev/null; then
+        python -m pytest || exit 100
+    # maven
+    elif ls |grep -E '^pom.xml$' >/dev/null; then
+        mvn clean test
+    fi
+}
+
+maketest
