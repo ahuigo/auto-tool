@@ -1,0 +1,54 @@
+# Commit messages rule:
+# 
+#     <type>(<scope>): <subject>
+#     <BLANK LINE>
+#     <body>
+#     <BLANK LINE>
+#     <footer>
+#
+# Example 1:
+#
+#   feat(shopping cart): add the amazing button
+#   feat: remove ticket list endpoint
+# 
+# Example 2:
+#
+#   feat: remove ticket list endpoint
+#
+#   refers to JIRA-1337
+#   BREAKING CHANGES: ticket enpoints no longer supports list all entites.
+#
+# Please note that:
+#  - The HEADER is a single line of max. 50 characters that         
+#    contains a succinct description of the change. It contains a   
+#    type, an optional scope, and a subject
+#       + <type> describes the kind of change that this commit is   
+#                providing. Allowed types are:
+#             * feat (feature)
+#             * fix (bug fix)
+#             * chore (maintain tools changes)
+#             * docs (documentation)
+#             * style (formatting, missing semicolons, …)
+#             * perf (A code change that improves performance)
+#             * refactor (A code change that neither fixes a bug or adds a feature)
+#             * test (when adding missing tests)
+#             * merge (merge/pull code)
+#       + <scope> can be anything specifying the place of the commit    
+#                 change
+#       + <subject> is a very short description of the change, in   
+#                   the following format:
+#             * imperative, present tense: “change” not             
+#               “changed”/“changes”
+#             * no capitalized first letter
+#             * no dot (.) at the end
+#  - The BODY should answer(72-character wrapped):
+#       * Why was this change necessary?
+#       * How does it address the problem?
+#       * Are there any side effects?
+#
+#  - The FOOTER should contain any information about Breaking       
+#    Changes and is also the place to reference GitHub issues that   
+#    this commit closes
+#       * Include a link to the ticket, if any.
+#       * BREAKING CHANGE
+#   Refer to: https://dev.to/helderburato/patterns-for-writing-better-git-commit-messages-4ba0
