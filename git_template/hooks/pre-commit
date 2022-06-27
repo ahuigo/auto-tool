@@ -19,9 +19,10 @@ maketest () {
     elif ls |grep -E '^go.mod$' >/dev/null; then
        go test -coverpkg=./... ./... |tee coverage.out
        if [[ -f main.go ]] ;then
-           go build main.go > /dev/null
+           go build -o /dev/null main.go
        elif [[ -f cmd/main.go ]] ;then
-           go build cmd/main.go > /dev/null
+           go build -o /dev/null cmd/main.go
+       fi
     # npm
     elif ls |grep -E '^package.json$' >/dev/null; then
         npm test
@@ -30,7 +31,7 @@ maketest () {
         deno test -A --no-check=remote
     # python
     elif ls |grep -E '^setup.py$' >/dev/null; then
-        python -m pytest || exit 100
+        python3 -m pytest || exit 100
     # maven
     elif ls |grep -E '^pom.xml$' >/dev/null; then
         mvn clean test
