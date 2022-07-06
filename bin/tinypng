@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+#curl --user api:API_KEY --data-binary @unoptimized.png -i https://api.tinify.com/shrink
+curl --user api:API_KEY --data-binary @$1 -i https://api.tinify.com/shrink

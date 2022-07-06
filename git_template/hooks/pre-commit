@@ -12,11 +12,12 @@ hasMakeTest () {
 }
 
 maketest () {
-    echo "run test...."
     if hasMakeTest;then
+        echo make test
         make test
     # golang
     elif ls |grep -E '^go.mod$' >/dev/null; then
+        echo go test ...
        go test -coverpkg=./... ./... |tee coverage.out
        if [[ -f main.go ]] ;then
            go build -o /dev/null main.go
@@ -25,15 +26,23 @@ maketest () {
        fi
     # npm
     elif ls |grep -E '^package.json$' >/dev/null; then
-        npm test
+        if grep -F '"test":' package.json >/dev/null;then
+            echo npm test
+            npm test
+        else
+            echo 'not found "test" in package.json'
+        fi
     # deno
     elif ls |grep -E '^deno.jsonc?$' >/dev/null; then
+        echo deno test ....
         deno test -A --no-check=remote
     # python
     elif ls |grep -E '^setup.py$' >/dev/null; then
+        echo python3 -m pytest
         python3 -m pytest || exit 100
     # maven
     elif ls |grep -E '^pom.xml$' >/dev/null; then
+        echo mvn clean test
         mvn clean test
     fi
 }
