@@ -47,4 +47,16 @@ maketest () {
     fi
 }
 
+checkDonau (){
+    if test $(git branch --show-current) = donau/dev; then
+        if grep 'artifactory.momenta.works/docker-momenta/' Dockerfile >/dev/null;then
+            echo "donau contains 'artifactory.momenta.works/docker-momenta/'!"
+            exit 1
+        fi
+    fi
+
+}
+
+checkDonau
 maketest
+
