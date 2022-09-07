@@ -10,6 +10,8 @@
      `$cd project` first)
 3. ssl:
    - gen-ssl.py : ssl certificate generate
+4. string 工具
+    - str/unescape.py
 
 所有的工具使用默认的yaml 配置文件 `~/.mo.yaml`.
 
