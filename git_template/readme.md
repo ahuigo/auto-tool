@@ -1,10 +1,13 @@
 # git template
+
 What this template contains?
-1. pre-commit hook:  
-it supports automatic test(go/python/java/nodejs/deno/...) before `git commit` execution.
+
+1. pre-commit hook: it supports automatic test(go/python/java/nodejs/deno/...)
+   before `git commit` execution.
 2. git commit message template
 
 ## 1-Click install
+
 1-Click install all git tools:
 
     # install global template
@@ -23,7 +26,9 @@ For help:
     ./git_template/init.sh -h
 
 ## Usage
+
 ### Auto code test
+
 This template includes hook for performing automated tests.
 
 Just run:
@@ -34,6 +39,7 @@ Just run:
     go test ./....
 
 ## Commit template
+
 Just run:
 
     $ git commit 
