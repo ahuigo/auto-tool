@@ -33,7 +33,7 @@ maketest () {
             echo 'not found "test" in package.json'
         fi
     # deno
-    elif ls |grep -E '^deno.jsonc?$' >/dev/null; then
+    elif ls |grep -E '^deno.jsonc?$' >/dev/null && ls *test* > /dev/null; then
         echo deno test ....
         deno test -A --no-check=remote
     # python

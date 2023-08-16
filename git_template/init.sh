@@ -66,7 +66,7 @@ if test "$FORCE" = '1' && test -d $HOME/.git_template ;then
     mv ~/.git_template ~/.git_template.bak
 fi
 if ! { [[ -L $HOME/.git_template ]] || [[ -d $HOME/.git_template ]];};then
-    if test $SOFT_LINK = 1; then
+    if test "$SOFT_LINK" = 1; then
         if ! [[ -L $HOME/.git_template ]];then
             ln -s $CWD ~/.git_template
         fi
