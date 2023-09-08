@@ -4,7 +4,7 @@ import os,sys
 from pathlib import Path
 parser = argparse.ArgumentParser()
 parser.add_argument('-n','--name', default="", help="helm chart name")
-parser.add_argument("suffix", help="helm suffix like: dev|staging|_ack_dev|...")
+parser.add_argument("envDir", help="helm envDir like: dev|staging|_ack_dev|...")
 gargs = parser.parse_args()
 
 def initYaml():
@@ -46,16 +46,18 @@ def checkHelmGitBranch(path:str):
     oripath=Path.cwd()
     os.chdir(path)
     branch_name = getoutput('git branch --show-current')
-    if branch_name != "cicd-template":
-        quit(f"{path} is not at branch `cicd-template`, but `{branch_name}`")
+    #if branch_name != "cicd-template":
+    if branch_name != "cicd":
+        quit(f"{path} is not at branch `cicd`, but `{branch_name}`")
     os.chdir(oripath)
 
-def getHelmPath(suffix):
+def getHelmPath(envDir):
     import glob
     home = os.getenv('HOME') or ''
     helmDir = localConf.get('chart_path', '')
     if not helmDir:
-        helmDir = home + f'/hdmap/hdmap-helm-charts'
+        #helmDir = home + f'/hdmap/hdmap-helm-charts'
+        helmDir = home + f'/hdmap/cicd'
     if helmDir.startswith('~/'):
         helmDir = home + helmDir[1:]
     checkHelmGitBranch(helmDir)
@@ -66,12 +68,13 @@ def getHelmPath(suffix):
         appname = gargs.name
 
     helmDir += f'/{appname}'
-    for filepath in glob.glob(f'{helmDir}/*{suffix}.yaml'):
+    helmFile = f'{helmDir}/{envDir}/conf.yaml'
+    for filepath in glob.glob(helmFile):
         return filepath
-    raise ParseException('Could not find helm path for:'+appname, helmDir)
+    raise ParseException('Could not find helm path for:'+appname, helmFile)
 
-def getHelmConf(suffix):
-    helmPath = getHelmPath(suffix)
+def getHelmConfOld(envDir):
+    helmPath = getHelmPath(envDir)
     conf = yaml.load(open(helmPath,'r'))
     if 'configMap' in conf:
         configMap = conf['configMap']['file']['data']
@@ -81,13 +84,19 @@ def getHelmConf(suffix):
     else:
         quit(f'Could not find configMap data')
 
+def getHelmConf(envDir):
+    helmPath = getHelmPath(envDir)
+    print(helmPath)
+    conf = yaml.load(open(helmPath,'r'))
+    return conf
 
-def handleEndpoint(url,suffix):
-    print('handleEndpoint:',url,localConf,suffix)
+
+def handleEndpoint(url,envDir):
+    print('handleEndpoint:',url,localConf,envDir)
     endpoints = localConf.get(url,None)
     if endpoints:
         for env,endpoint in endpoints.items():
-            if suffix.endswith(env):
+            if envDir.endswith(env):
                 return endpoint
         quit(f'coulnd find value for:{url}')
     return url
@@ -95,23 +104,23 @@ def handleEndpoint(url,suffix):
 
 from collections import OrderedDict
 from ruamel.yaml.comments import CommentedSeq
-def handleK8sYaml(conf, suffix):
+def handleK8sYaml(conf, envDir):
     #print('conf:', type(conf),conf)
     for k,v in conf.items():
         if isinstance(v, OrderedDict):
-            handleK8sYaml(v, suffix)
+            handleK8sYaml(v, envDir)
         elif isinstance(v, CommentedSeq):
-            conf[k]=[handleEndpoint(vv, suffix) for vv in v]
+            conf[k]=[handleEndpoint(vv, envDir) for vv in v]
             # print('v',v)
             # for item in v:
-            #     handleK8sYaml(item, suffix)
+            #     handleK8sYaml(item, envDir)
         elif isinstance(v, str) and ':' in v:
-            conf[k]=handleEndpoint(v, suffix)
+            conf[k]=handleEndpoint(v, envDir)
             # print(k,type(v), v)
 
-def importHelmConf(suffix):
-    data = getHelmConf(suffix)
-    handleK8sYaml(data, suffix)
+def importHelmConf(envDir):
+    data = getHelmConf(envDir)
+    handleK8sYaml(data, envDir)
     output = yamlDump(data)
     print(output)
     p = Path('./config/conf.yaml')
@@ -122,8 +131,8 @@ def importHelmConf(suffix):
     print('write success')
 
 if __name__ == '__main__':
-    suffix = gargs.suffix
+    envDir = gargs.envDir
     try:
-        importHelmConf(suffix)
+        importHelmConf(envDir)
     except ParseException as e:
         print(e.args)
