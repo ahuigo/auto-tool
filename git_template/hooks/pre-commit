@@ -20,7 +20,7 @@ maketest () {
         echo go test -v ./...
        go test -coverpkg=./... ./... |tee coverage.out
        if [[ -f main.go ]] ;then
-           go build -o /dev/null main.go
+           go build -o /dev/null .
        elif [[ -f cmd/main.go ]] ;then
            go build -o /dev/null cmd/main.go
        fi

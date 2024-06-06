@@ -1,0 +1,1 @@
+- 为什么你的etcd内存占用那么高？ https://blog.longpi1.com/2022/10/07/15-%E5%86%85%E5%AD%98%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%A0%E7%9A%84etcd%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8%E9%82%A3%E4%B9%88%E9%AB%98%EF%BC%9F/
