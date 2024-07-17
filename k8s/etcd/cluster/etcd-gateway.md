@@ -2,7 +2,9 @@
 > https://etcd.io/docs/v3.1/op-guide/grpc_proxy/
 
 1. etcd gateway：
-etcd gateway 是一个简单的 TCP 代理，它将所有的请求转发到 etcd 集群的一个成员。它不会解析请求，也不会缓存任何数据。它的主要用途是提供一个单一的访问点，使客户端不需要知道所有 etcd 集群成员的地址。
+etcd gateway 是一个简单的 TCP 代理，它将所有的请求转发到 etcd 集群的一个成员。
+它不会解析请求，也不会缓存任何数据。它的主要用途是提供一个单一的访问点，使客户端不需要知道所有 etcd 集群成员的地址。
+> K8s中本身支持服务发现，可以使用系统管理的 DNS 名称或虚拟 IP 地址访问 etcd 集群。例如，kube-proxy 等同于 etcd gateway。
 
 2. etcd grpc-proxy：
 etcd grpc-proxy 是一个更复杂的反向代理，它可以解析 gRPC 请求，并对一些请求进行缓存。

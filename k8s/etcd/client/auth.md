@@ -36,7 +36,6 @@ list user
     # now all client requests go through auth
     etcdctl auth disable --user=root:12
 
-
 ## change role's permission
 可读写 my-key, wildcard key
 
