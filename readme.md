@@ -19,9 +19,4 @@
     helm:
         # 指定helm chart path
         chart_path: ~/hdmap/hdmap-helm-charts
-        # 本地运行时：把短域名替换成长域名
-        mojito:7900:
-            dev: tos.dev.hdmap-inner.momenta.works
-            staging: tos.staging.hdmap-inner.momenta.works
-            prod: tos.hdmap-inner.momenta.works
     MM
